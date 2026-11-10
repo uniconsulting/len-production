@@ -66,7 +66,7 @@
   color: var(--ui-accent-ink);
 }
 
-.faq-item > summary:focus-visible {
+:where(html:not([data-pointer-focus])) .faq-item > summary:focus-visible {
   outline: none;
   color: var(--ui-accent-ink);
   text-decoration: underline;
@@ -92,8 +92,8 @@
 }
 
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .faq-item > summary:hover,
-  .faq-item > summary:hover svg {
+  :where(html:not([data-touch-hover])) .faq-item > summary:hover,
+  :where(html:not([data-touch-hover])) .faq-item > summary:hover svg {
     color: var(--ui-accent-ink);
   }
 }

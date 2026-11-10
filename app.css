@@ -36,9 +36,15 @@ a {
   color: inherit;
   text-decoration: none;
 }
-:where(button, a, input, select, [tabindex]):focus-visible {
+:where(html:not([data-pointer-focus])) :where(button, a, input, select, [tabindex]):focus-visible,
+:where(input:not([type='radio'], [type='checkbox']), textarea):focus-visible {
   outline: 2px solid var(--ui-focus);
   outline-offset: 3px;
+}
+/* Suppress the browser's own ring on controls focused during a pointer action.
+   Text fields keep a visible editing focus regardless of the input method. */
+:where(html[data-pointer-focus]) :where(button, a, summary, select, input[type='radio'], [tabindex]:not(input, textarea)):focus {
+  outline: none;
 }
 h1,
 h2,
@@ -129,8 +135,8 @@ dd {
   font: 550 15px/1.35 var(--ui-font);
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .side-nav a:hover,
-  .side-bottom button:hover {
+  :where(html:not([data-touch-hover])) .side-nav a:hover,
+  :where(html:not([data-touch-hover])) .side-bottom button:hover {
     background: #eef0eb;
     color: var(--ui-ink);
   }
@@ -220,9 +226,9 @@ main {
   font-weight: 600;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .share-btn:hover,
-  .round-link:hover,
-  .close-btn:hover {
+  :where(html:not([data-touch-hover])) .share-btn:hover,
+  :where(html:not([data-touch-hover])) .round-link:hover,
+  :where(html:not([data-touch-hover])) .close-btn:hover {
     background: #dae1da;
   }
 }
@@ -291,7 +297,7 @@ main {
   background: #eef1eb;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .signal-open:hover {
+  :where(html:not([data-touch-hover])) .signal-open:hover {
     background: #dde9e0;
   }
 }
@@ -311,7 +317,7 @@ main {
   color: #fff;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .hero-card .signal-open:hover {
+  :where(html:not([data-touch-hover])) .hero-card .signal-open:hover {
     background: rgb(0 0 0 / 24%);
   }
 }
@@ -574,7 +580,7 @@ main {
   font-size: 13px;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .plot-tip:not([hidden]) {
+  :where(html:not([data-touch-hover])) .plot-tip:not([hidden]) {
     display: grid;
   }
 }
@@ -599,9 +605,9 @@ footer button {
   cursor: pointer;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .text-btn:hover,
-  footer button:hover,
-  .row-more:hover {
+  :where(html:not([data-touch-hover])) .text-btn:hover,
+  :where(html:not([data-touch-hover])) footer button:hover,
+  :where(html:not([data-touch-hover])) .row-more:hover {
     text-decoration: underline;
   }
 }

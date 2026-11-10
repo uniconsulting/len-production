@@ -49,8 +49,8 @@
 .len-picker-panel button:focus:not(:focus-visible) {
   outline: none;
 }
-.len-picker-trigger:focus-visible,
-.len-picker-panel button:focus-visible {
+:where(html:not([data-pointer-focus])) .len-picker-trigger:focus-visible,
+:where(html:not([data-pointer-focus])) .len-picker-panel button:focus-visible {
   outline: 2px solid var(--ui-accent-ink);
   outline-offset: -2px;
 }
@@ -160,8 +160,8 @@
   cursor: default;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .len-picker-trigger:hover,
-  .len-picker-panel button:not([aria-selected='true'], [aria-pressed='true'], :disabled):hover {
+  :where(html:not([data-touch-hover])) .len-picker-trigger:hover,
+  :where(html:not([data-touch-hover])) .len-picker-panel button:not([aria-selected='true'], [aria-pressed='true'], :disabled):hover {
     background: var(--ui-surface-hover);
   }
 }
@@ -225,7 +225,7 @@
   background: var(--ui-surface-hover);
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .len-picker-field > .len-picker-trigger:hover {
+  :where(html:not([data-touch-hover])) .len-picker-field > .len-picker-trigger:hover {
     background: var(--ui-surface-hover);
   }
 }

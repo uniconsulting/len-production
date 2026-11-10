@@ -94,7 +94,7 @@
 }
 
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ref-title-link:hover {
+  :where(html:not([data-touch-hover])) .ref-title-link:hover {
     text-decoration: underline;
     text-underline-offset: 4px;
   }
@@ -247,38 +247,38 @@
   opacity: 0;
 }
 .ref-month.is-mark > span,
-.ref-month:focus-visible > span {
+:where(html:not([data-pointer-focus])) .ref-month:focus-visible > span {
   opacity: 1;
 }
-.ref-months:has(.ref-month:focus-visible) .ref-month:not(:focus-visible) > span {
+:where(html:not([data-pointer-focus])) .ref-months:has(.ref-month:focus-visible) .ref-month:not(:focus-visible) > span {
   opacity: 0;
 }
-.ref-month:focus-visible {
+:where(html:not([data-pointer-focus])) .ref-month:focus-visible {
   outline: 0;
   z-index: 1;
 }
-.ref-month:focus-visible .ref-month-label {
+:where(html:not([data-pointer-focus])) .ref-month:focus-visible .ref-month-label {
   box-shadow: 0 0 0 2px #b4f8cf;
 }
-.ref-month:focus-visible .ref-month-wire {
+:where(html:not([data-pointer-focus])) .ref-month:focus-visible .ref-month-wire {
   background: #fff;
 }
-.ref-title-link:focus-visible,
-.ref-fleet-link:focus-visible {
+:where(html:not([data-pointer-focus])) .ref-title-link:focus-visible,
+:where(html:not([data-pointer-focus])) .ref-fleet-link:focus-visible {
   outline: 2px solid #aaf3c2;
   outline-offset: 3px;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ref-months:has(.ref-month:hover) .ref-month:not(:hover) > span {
+  :where(html:not([data-touch-hover])) .ref-months:has(.ref-month:hover) .ref-month:not(:hover) > span {
     opacity: 0;
   }
-  .ref-months .ref-month:hover > span {
+  :where(html:not([data-touch-hover])) .ref-months .ref-month:hover > span {
     opacity: 1;
   }
-  .ref-month:hover .ref-month-wire {
+  :where(html:not([data-touch-hover])) .ref-month:hover .ref-month-wire {
     background: #fff;
   }
-  .ref-month:hover {
+  :where(html:not([data-touch-hover])) .ref-month:hover {
     z-index: 1;
   }
 }
@@ -307,7 +307,7 @@
 }
 
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ref-fleet-link:hover {
+  :where(html:not([data-touch-hover])) .ref-fleet-link:hover {
     background: rgb(255 255 255 / 22%);
   }
 }

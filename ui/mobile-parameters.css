@@ -240,9 +240,9 @@
     color: var(--ui-muted);
     background: transparent;
   }
-  .parameters-form :is(button:focus-visible),
-  .parameter-back:focus-visible,
-  .parameter-segments input:focus-visible + span {
+  :where(html:not([data-pointer-focus])) .parameters-form :is(button:focus-visible),
+  :where(html:not([data-pointer-focus])) .parameter-back:focus-visible,
+  :where(html:not([data-pointer-focus])) .parameter-segments input:focus-visible + span {
     outline: 2px solid var(--ui-focus);
     outline-offset: -2px;
   }

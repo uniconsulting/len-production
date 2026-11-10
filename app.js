@@ -5,13 +5,28 @@ import { renderStrip } from './ui/reference-strip.js?v=11';
 import { renderAnalytics } from './ui/reference-analytics.js?v=11';
 import { renderFAQ, bindFAQ, rememberFAQ } from './ui/investor-faq.js?v=13';
 import { icon } from './ui/icons.js';
-import { chart, bindChart } from './ui/chart.js?v=14';
+import { chart, bindChart } from './ui/chart.js?v=15';
 import { renderPickers, bindPickers } from './ui/pickers.js?v=13';
 import { bindBento } from './ui/bento.js?v=11';
-import { renderProduction, renderInvestors, bindDetails } from './ui/details.js?v=14';
+import { renderProduction, renderInvestors, bindDetails } from './ui/details.js?v=15';
 
 const app = document.querySelector('#app'),
   dialog = document.querySelector('#dialog');
+
+// WebKit can match :focus-visible after showModal() or focus() during a tap.
+// Keep the actual focus for navigation and only change how it is drawn.
+const root = document.documentElement;
+document.addEventListener('pointerdown', (event) => {
+  root.setAttribute('data-pointer-focus', '');
+  root.toggleAttribute('data-touch-hover', event.pointerType !== 'mouse');
+}, true);
+document.addEventListener('keydown', () => root.removeAttribute('data-pointer-focus'), true);
+document.addEventListener('pointermove', (event) => {
+  if (event.pointerType === 'mouse' && root.hasAttribute('data-touch-hover')) {
+    root.removeAttribute('data-touch-hover');
+  }
+}, true);
+
 const labels = { overview: 'Обзор', production: 'Производство', investors: 'Выплаты' };
 const pageTitles = {
   overview: 'Обзор производства',

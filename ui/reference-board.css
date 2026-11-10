@@ -29,11 +29,11 @@
 .ref-strip > * {
   min-width: 0;
 }
-.ref-board :is(button, a, [tabindex]):focus-visible {
+:where(html:not([data-pointer-focus])) .ref-board :is(button, a, [tabindex]):focus-visible {
   outline: 2px solid var(--ui-focus);
   outline-offset: 3px;
 }
-.ref-board :is(.ref-lead, .strip-result, .ra-card) :is(button, a, summary, [tabindex]):focus-visible {
+:where(html:not([data-pointer-focus])) .ref-board :is(.ref-lead, .strip-result, .ra-card) :is(button, a, summary, [tabindex]):focus-visible {
   outline-color: #b3ffce;
 }
 .ref-mini {
@@ -78,7 +78,7 @@
   background: none;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ref-mini h2 :is(button, a):hover {
+  :where(html:not([data-touch-hover])) .ref-mini h2 :is(button, a):hover {
     color: var(--ui-accent-ink);
   }
 }
@@ -106,7 +106,7 @@
   box-shadow: none;
   border: 0;
 }
-.ref-board .strip-result h2 button:focus-visible {
+:where(html:not([data-pointer-focus])) .ref-board .strip-result h2 button:focus-visible {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.3em;

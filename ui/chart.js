@@ -183,7 +183,7 @@ export function bindChart(root, ctx) {
   const tip = area.querySelector('.plot-tip');
   const hoverPreview = matchMedia('(min-width: 701px) and (hover: hover) and (pointer: fine)');
   area.onpointermove = (e) => {
-    if (e.pointerType === 'touch' || !hoverPreview.matches) {
+    if (e.pointerType !== 'mouse' || !hoverPreview.matches) {
       tip.hidden = true;
       return;
     }

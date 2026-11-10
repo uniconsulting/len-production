@@ -156,15 +156,15 @@ select.ui-select {
   color: var(--ui-muted);
   font: 600 11px/15px var(--ui-font);
 }
-:is(.ui-segmented button, .ui-select, .ui-table-frame, .ui-table button):focus-visible {
+:where(html:not([data-pointer-focus])) :is(.ui-segmented button, .ui-select, .ui-table-frame, .ui-table button):focus-visible {
   outline: 2px solid var(--ui-focus);
   outline-offset: 2px;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ui-segmented > button:enabled:hover {
+  :where(html:not([data-touch-hover])) .ui-segmented > button:enabled:hover {
     color: var(--ui-ink);
   }
-  .ui-table tbody tr:hover > * {
+  :where(html:not([data-touch-hover])) .ui-table tbody tr:hover > * {
     background-color: var(--ui-quiet);
   }
 }

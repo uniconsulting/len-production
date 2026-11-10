@@ -19,7 +19,7 @@
 .detail-view :is(button, summary) {
   -webkit-tap-highlight-color: transparent;
 }
-.detail-view :is(button, summary, .d-chart-touch):focus-visible {
+:where(html:not([data-pointer-focus])) .detail-view :is(button, summary, .d-chart-touch):focus-visible {
   outline: 2px solid var(--ui-focus);
   outline-offset: 3px;
 }
@@ -400,7 +400,7 @@
   transform: rotate(180deg);
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .d-disclosure summary:hover {
+  :where(html:not([data-touch-hover])) .d-disclosure summary:hover {
     color: var(--ui-accent-ink);
   }
 }
@@ -513,7 +513,7 @@
   border-radius: 0 12px 12px 0;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .d-table-frame tbody tr:not(.d-fleet-detail, .d-ledger-detail):hover {
+  :where(html:not([data-touch-hover])) .d-table-frame tbody tr:not(.d-fleet-detail, .d-ledger-detail):hover {
     background: var(--ui-quiet);
   }
 }
@@ -592,7 +592,7 @@
   border-radius: 10px;
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  :is(.d-icon-btn, .d-machine-button, .d-ledger-year):hover {
+  :where(html:not([data-touch-hover])) :is(.d-icon-btn, .d-machine-button, .d-ledger-year):hover {
     color: var(--ui-accent-ink);
   }
 }
@@ -932,7 +932,7 @@
     justify-content: space-between;
     font: 620 15px/1.4 var(--ui-font);
   }
-  .detail-view .d-disclosure > summary:focus-visible {
+  :where(html:not([data-pointer-focus])) .detail-view .d-disclosure > summary:focus-visible {
     outline-offset: 0;
   }
   .d-group-list,
@@ -1035,7 +1035,7 @@
     font: 600 16px/1.35 var(--ui-font);
     text-overflow: ellipsis;
   }
-  .d-select-field select:focus-visible {
+  :where(html:not([data-pointer-focus])) .d-select-field select:focus-visible {
     outline: 2px solid var(--ui-focus);
     outline-offset: 2px;
   }
@@ -1095,7 +1095,7 @@
     justify-self: end;
     color: var(--detail-quiet);
   }
-  .detail-view .d-mobile-record > button:focus-visible {
+  :where(html:not([data-pointer-focus])) .detail-view .d-mobile-record > button:focus-visible {
     outline-offset: -2px;
   }
   .d-list-toggle {

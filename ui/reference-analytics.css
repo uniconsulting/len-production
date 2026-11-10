@@ -185,7 +185,7 @@
 .ra-card details > summary::-webkit-details-marker {
   display: none;
 }
-.ra-card summary:focus-visible {
+:where(html:not([data-pointer-focus])) .ra-card summary:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
@@ -372,11 +372,11 @@
   color: var(--ra-ink);
 }
 @media (min-width: 701px) and (hover: hover) and (pointer: fine) {
-  .ra-flow-point summary:hover {
+  :where(html:not([data-touch-hover])) .ra-flow-point summary:hover {
     color: var(--ra-ink);
     font-weight: 600;
   }
-  .ra-bar summary:hover small {
+  :where(html:not([data-touch-hover])) .ra-bar summary:hover small {
     color: var(--ra-ink);
   }
 }

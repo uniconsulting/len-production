@@ -75,7 +75,7 @@
     cursor: pointer;
   }
 
-  .batch-row:focus-visible {
+  :where(html:not([data-pointer-focus])) .batch-row:focus-visible {
     outline: 2px solid var(--ui-focus);
     outline-offset: 2px;
     border-radius: 7px;

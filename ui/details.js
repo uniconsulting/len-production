@@ -837,9 +837,9 @@ export function bindDetails(root, ctx) {
         row.policies[policy].cumPayouts[role.idx] * role.fraction,
       );
     };
+    const hoverPreview = window.matchMedia('(min-width: 701px) and (hover: hover) and (pointer: fine)');
     plot.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'touch' && window.matchMedia('(hover: hover) and (pointer: fine)').matches)
-        describe(hit(e));
+      describe(e.pointerType === 'mouse' && hoverPreview.matches ? hit(e) : m.m);
     });
     plot.addEventListener('pointerleave', () => describe(m.m));
     plot.addEventListener('click', (e) => ctx.update({ month: hit(e) }, { focus: '.d-chart-touch' }));
