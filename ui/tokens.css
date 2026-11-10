@@ -1,0 +1,68 @@
+/* Self-hosted type and the shared Mieru presentation roles. */
+@font-face {
+  font-family: 'Garet Book';
+  src: url('../assets/fonts/Garet-Book.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Doto Rounded';
+  src: url('../assets/fonts/Doto-Rounded-SemiBold.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 600;
+}
+
+:root {
+  --ui-font: 'Garet Book', Arial, sans-serif;
+  --ui-font-display: var(--ui-font);
+  --ui-font-numeric: 'Doto Rounded', ui-monospace, Menlo, monospace;
+  --ui-canvas: #e8e9e6;
+  --ui-surface: #fff;
+  --ui-quiet: #f5f6f2;
+  --ui-surface-hover: #eceeea;
+  --ui-ink: #111a16;
+  --ui-muted: #59615c;
+  --ui-tertiary: #6b736e;
+  --ui-border: rgb(17 26 22 / 10%);
+  --ui-border-strong: rgb(17 26 22 / 17%);
+  --ui-accent: #46d186;
+  --ui-accent-soft: #dcf6e7;
+  --ui-accent-ink: #126644;
+  --ui-lime: #46d186;
+  --ui-cool: #5d8273;
+  --ui-positive: #257a49;
+  --ui-negative: #b9473f;
+  --ui-radius: 24px;
+  --ui-radius-panel: 32px;
+  --ui-radius-control: 12px;
+  --ui-radius-menu: 18px;
+  --ui-radius-option: 11px;
+  --ui-gap: 16px;
+  --ui-fast: 150ms;
+  --ui-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ui-focus: #19794d;
+  --ui-display: 400 clamp(34px, 3.25vw, 50px) / 1.12 var(--ui-font-display);
+  --ui-heading: 400 clamp(26px, 2.4vw, 40px) / 1.1 var(--ui-font-display);
+  --ui-section: 550 22px/1.25 var(--ui-font);
+  --ui-body: 450 14px/20px var(--ui-font);
+  --ui-label: 550 14px/20px var(--ui-font);
+
+  --ui-card-title: 550 clamp(21px, 1.7vw, 28px) / 1.17 var(--ui-font);
+  --ui-kpi: 500 clamp(31px, 3vw, 46px) / 1.06 var(--ui-font-display);
+  --ui-title-stroke: 0.016em;
+  --ui-reading: 600 clamp(38px, 12cqw, 78px) / 1.1 var(--ui-font-numeric);
+  --ui-caption: 500 14px/1.4 var(--ui-font);
+  --ui-number: 600 17px/1.25 var(--ui-font);
+  --ui-depth-top: #919299;
+  --ui-depth-base: #414247;
+  --ui-depth-bottom: #595b60;
+  --ui-depth-core: #121316;
+  --ui-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' seed='19' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The licensed Book is a static face. Add a small optical weight only to
+   headings, keeping the original glyph shapes and one consistent typeface. */
+:where(h1, h2, h3) {
+  font-synthesis: none;
+  -webkit-text-stroke: var(--ui-title-stroke) currentColor;
+}

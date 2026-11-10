@@ -1,0 +1,299 @@
+/* The provided reference uses a gradient surface with a blurred core,
+   capsule columns for quantities and notched scales for capacity. */
+.detail-view .production-panel {
+  --ui-ink: #fff;
+  --detail-quiet: #d0d7d3;
+  --ui-accent-ink: #adffd4;
+  --ui-focus: #baffdb;
+  --panel-accent: #8df0b8;
+  --detail-inset: rgb(255 255 255 / 9%);
+  position: relative;
+  isolation: isolate;
+  gap: 0;
+  min-width: 0;
+  padding: clamp(21px, 2vw, 29px);
+  border-radius: 0;
+  color: var(--ui-ink);
+}
+.production-panel > .bento-paint {
+  background: linear-gradient(
+    180deg,
+    var(--p-top),
+    var(--p-base) 36%,
+    var(--p-base) 74%,
+    var(--p-bottom)
+  );
+}
+.production-panel > .bento-paint::before {
+  position: absolute;
+  content: '';
+  inset: 13% 7% -3%;
+  border-radius: 25%;
+  background: var(--p-core);
+  filter: blur(38px);
+}
+.production-fleet {
+  --p-top: #4f8a70;
+  --p-base: #247454;
+  --p-bottom: #428568;
+  --p-core: #06261b;
+}
+.production-work {
+  --p-top: #666771;
+  --p-base: #34353d;
+  --p-bottom: #44464e;
+  --p-core: #090a0d;
+}
+.production-panel .d-resource-head {
+  align-items: baseline;
+  gap: 5px 12px;
+}
+.production-panel .d-resource-head h2 {
+  font-size: clamp(19px, 4.6cqi, 23px);
+  line-height: 1.18;
+}
+.production-panel .d-resource-head > span {
+  color: #e6ede9;
+  font-size: 13px;
+}
+.production-metric {
+  margin-top: 18px;
+  font-size: clamp(44px, 11cqi, 60px);
+  line-height: 1.06;
+  letter-spacing: -0.065em;
+}
+.production-metric strong {
+  font-weight: 400;
+  white-space: nowrap;
+}
+.detail-view .production-subvalue {
+  margin-top: 5px;
+  color: #e1e9e5;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.production-columns {
+  --chart-height: 124px;
+  display: grid;
+  grid-template-columns: max-content repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 2px;
+  margin: 22px 0 19px;
+}
+.production-scale {
+  height: var(--chart-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 4px;
+  color: #c1d5cb;
+  font-size: 11px;
+  line-height: 1;
+  text-align: right;
+}
+.production-panel .production-column {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  min-width: 0;
+  padding: 0 2px 3px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.production-column-hint {
+  position: absolute;
+  z-index: 1;
+  top: 22%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  width: max-content;
+  max-width: 160px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #fff;
+  color: #15251e;
+  box-shadow: 0 3px 14px rgb(27 54 37 / 16%);
+  text-align: start;
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.production-column:last-child .production-column-hint {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+.production-column:nth-child(2) .production-column-hint {
+  left: 0;
+  transform: none;
+}
+.production-column:focus-visible .production-column-hint {
+  display: block;
+}
+@media (hover: hover) {
+  .production-column:hover .production-column-hint {
+    display: block;
+  }
+}
+.production-column-plot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: var(--chart-height);
+  width: 100%;
+}
+.production-column-track {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: clamp(20px, 6cqi, 34px);
+  background: rgb(0 0 0 / 30%);
+  border-radius: 99px;
+}
+.production-column-track > i {
+  position: absolute;
+  display: block;
+  inset: auto 0 0;
+  border-radius: inherit;
+  background: #fff;
+}
+.production-column-track > i.peak {
+  background: var(--panel-accent);
+}
+.production-column-value {
+  margin-top: 9px;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+.production-column-name {
+  color: #d8e8df;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.production-column:hover .production-column-name {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.production-work-allocation {
+  display: grid;
+  gap: 16px;
+  margin: 22px 0;
+}
+.production-work-row,
+.detail-view .production-work-row.d-owner-support {
+  display: block;
+  margin: 0;
+  line-height: 1.35;
+}
+.production-work-row > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  font-size: 14px;
+}
+.production-work-row > div > span,
+.production-work-row strong {
+  font-weight: 600;
+}
+.production-work-row small,
+.production-work-row p {
+  color: var(--detail-quiet);
+  font-size: 12px;
+  font-weight: 400;
+}
+.production-ticks {
+  display: block;
+  width: 100%;
+  height: 16px;
+  margin-top: 7px;
+}
+.production-work-main .production-ticks {
+  height: 20px;
+}
+.production-work-main > p {
+  margin-top: 2px;
+}
+.production-ticks line {
+  stroke: rgb(255 255 255 / 25%);
+  stroke-linecap: round;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.production-ticks .filled {
+  stroke: var(--panel-accent);
+}
+.production-work-row:not(.production-work-main) .filled {
+  stroke: #d9e2dc;
+}
+.production-links {
+  margin-top: auto;
+}
+.detail-view .production-links .d-disclosure {
+  margin: 0;
+  border-top: 1px solid rgb(255 255 255 / 18%);
+}
+.detail-view .production-links summary {
+  width: 100%;
+  min-height: 41px;
+  justify-content: space-between;
+  color: #f7f9f8;
+  font-size: 14px;
+}
+.detail-view .production-links .d-disclosure[open] {
+  padding-bottom: 12px;
+}
+.detail-view .production-links .d-note {
+  margin-top: 9px;
+}
+.production-links .d-breakdown dt small {
+  font-size: 12px;
+}
+.production-links .text-btn {
+  color: #fff;
+}
+.d-top-grid:has(.production-links details[open]) {
+  align-items: start;
+}
+.d-top-grid:has(.production-links details[open]) .production-panel {
+  align-self: start;
+}
+.d-registry {
+  scroll-margin-top: 20px;
+}
+@container (max-width: 360px) {
+  .production-column-name {
+    font-size: 11px;
+  }
+  .production-columns {
+    --chart-height: 105px;
+  }
+  .production-scale {
+    font-size: 10px;
+  }
+}
+@media (max-width: 700px) {
+  .detail-view .production-panel {
+    padding: 23px 20px 12px;
+  }
+  .production-panel .d-resource-head h2 {
+    font-size: 20px;
+  }
+  .production-metric {
+    margin-top: 17px;
+  }
+  .detail-view .production-links summary {
+    min-height: 46px;
+  }
+  .production-columns {
+    margin-top: 18px;
+  }
+}
