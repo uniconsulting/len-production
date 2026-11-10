@@ -160,7 +160,7 @@ select.ui-select {
   outline: 2px solid var(--ui-focus);
   outline-offset: 2px;
 }
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .ui-segmented > button:enabled:hover {
     color: var(--ui-ink);
   }

@@ -91,7 +91,7 @@
   color: var(--ui-ink);
 }
 
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .faq-item > summary:hover,
   .faq-item > summary:hover svg {
     color: var(--ui-accent-ink);

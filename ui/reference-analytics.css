@@ -212,7 +212,6 @@
   color: var(--ra-muted);
 }
 .ra-flow-point summary[aria-current],
-.ra-flow-point summary:hover,
 .ra-flow-point[open] summary {
   color: var(--ra-ink);
   font-weight: 600;
@@ -369,9 +368,17 @@
   font-size: 11px;
   line-height: 1;
 }
-.ra-bar summary[aria-current] small,
-.ra-bar summary:hover small {
+.ra-bar summary[aria-current] small {
   color: var(--ra-ink);
+}
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .ra-flow-point summary:hover {
+    color: var(--ra-ink);
+    font-weight: 600;
+  }
+  .ra-bar summary:hover small {
+    color: var(--ra-ink);
+  }
 }
 .ra-bar .ra-tip {
   bottom: 22px;

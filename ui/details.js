@@ -535,113 +535,100 @@ function personKPIs(ctx, c, m, role) {
   </section>`;
 }
 
+// Both views use the same net cash series. On a phone, give each month room
+// by showing one twelve-month plan year; keep the full horizon on desktop.
 function payoutChart(c, m, role, policy) {
-  const cash = role.cash,
-    values = [0, ...c.months.map((row) => row.policies[policy].cumPayouts[role.idx] * role.fraction)];
-  const top = Math.max(1, cash, ...values) * 1.08,
-    w = 640,
+  const mobile = compact.matches;
+  const yearIndex = Math.floor((m.m - 1) / 12);
+  const start = mobile ? yearIndex * 12 : 0;
+  const end = mobile ? Math.min(start + 12, c.months.length) : c.months.length;
+  const paid = (row) => row.policies[policy].cumPayouts[role.idx] * role.fraction;
+  const points = c.months.slice(start, end);
+  const opening = start > 0 ? paid(c.months[start - 1]) : 0;
+  const values = [opening, ...points.map(paid)];
+  const top = Math.max(1, role.cash, ...values) * 1.08;
+  const w = mobile ? 320 : 640,
     h = 153,
     left = 8,
-    right = 632,
+    right = w - 8,
     bottom = 145,
     yTop = 7;
-  const x = (i) => left + ((right - left) * i) / (values.length - 1),
-    y = (v) => bottom - ((bottom - yTop) * v) / top;
+  const x = (i) => {
+    const progress = mobile ? Math.max(0, i - 1) / Math.max(1, points.length - 1) : i / points.length;
+    return left + (right - left) * progress;
+  };
+  const y = (v) => bottom - ((bottom - yTop) * v) / top;
   const xy = (n) => n.toFixed(2);
-  let path = 'M' + xy(x(0)) + ' ' + xy(y(0));
+  let path = 'M' + xy(x(0)) + ' ' + xy(y(opening));
   for (let i = 1; i < values.length; i++) path += ' H' + xy(x(i)) + ' V' + xy(y(values[i]));
   const grid = [0, 0.5, 1]
     .map(
       (fr) =>
-        '<line x1="' +
-        left +
-        '" x2="' +
-        right +
-        '" y1="' +
-        xy(y(top * fr)) +
-        '" y2="' +
-        xy(y(top * fr)) +
-        '" class="d-chart-grid"/>',
+        `<line x1="${left}" x2="${right}" y1="${xy(y(top * fr))}" y2="${xy(y(top * fr))}" class="d-chart-grid"/>`,
     )
     .join('');
   const depositLine =
-    cash > 0
-      ? '<line x1="' +
-        left +
-        '" x2="' +
-        right +
-        '" y1="' +
-        xy(y(cash)) +
-        '" y2="' +
-        xy(y(cash)) +
-        '" class="d-chart-deposit"/>'
+    role.cash > 0
+      ? `<line x1="${left}" x2="${right}" y1="${xy(y(role.cash))}" y2="${xy(y(role.cash))}" class="d-chart-deposit"/>`
       : '';
   const payback = c.policies[policy].payback[role.idx];
-  const returnPoint =
-    cash > 0 && Number.isInteger(payback) && payback >= 1 && payback <= values.length - 1
-      ? `<circle cx="${xy(x(payback))}" cy="${xy(y(values[payback]))}" r="5.8" class="d-chart-return"><title>Возврат вклада · ${monthName(c.months[payback - 1].date)}</title></circle>`
-      : '';
-  const paybackCaption = returnPoint
-    ? `<span class="d-return-key"><i></i>Возврат${compact.matches ? '' : ' · ' + monthName(c.months[payback - 1].date, true)}</span>`
+  const recovered = role.cash > 0 && Number.isInteger(payback) && payback > start && payback <= end;
+  const returnPoint = recovered
+    ? `<circle cx="${xy(x(payback - start))}" cy="${xy(y(values[payback - start]))}" r="5.8" class="d-chart-return"><title>Возврат вклада · ${monthName(c.months[payback - 1].date)}</title></circle>`
     : '';
-  const pt = values[m.m];
-  return (
-    '<section class="bento-card d-card d-cash-chart"><div class="d-head"><div><h2>Накопленные выплаты</h2><p class="d-note">' +
-    (compact.matches ? 'За 5 лет' : esc(role.full)) +
-    ' · после расчётного налога</p></div><div class="d-chart-key"><span><i></i>Выплаты</span>' +
-    (cash > 0
-      ? `<span><i class="d-dashed"></i>${compact.matches ? 'Вклад' : 'Денежный вклад'}</span>`
-      : '') +
-    paybackCaption +
-    '</div></div>' +
-    '<div class="d-chart-wrap"><div class="d-chart-axis" aria-hidden="true"><span>' +
-    axisLabel(top) +
-    '</span><span>0 ₽</span></div><div class="d-chart-touch" tabindex="0" role="slider" aria-label="Месяц графика выплат" aria-valuemin="1" aria-valuemax="60" aria-valuenow="' +
-    m.m +
-    '" aria-valuetext="' +
-    monthName(m.date) +
-    ', ' +
-    rub(pt) +
-    '"><svg class="d-cash-svg" aria-hidden="true" viewBox="0 0 ' +
-    w +
-    ' ' +
-    h +
-    '" preserveAspectRatio="none"><defs><linearGradient id="dividend-wash" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ui-accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--ui-accent)" stop-opacity=".03"/></linearGradient></defs>' +
-    grid +
-    depositLine +
-    '<path d="' +
-    path +
-    ' V' +
-    bottom +
-    ' H' +
-    left +
-    ' Z" class="d-chart-area" fill="url(#dividend-wash)"/><path d="' +
-    path +
-    '" class="d-chart-series"/><line x1="' +
-    xy(x(m.m)) +
-    '" x2="' +
-    xy(x(m.m)) +
-    '" y1="' +
-    yTop +
-    '" y2="' +
-    bottom +
-    '" class="d-chart-selected"/>' +
-    returnPoint +
-    '<circle cx="' +
-    xy(x(m.m)) +
-    '" cy="' +
-    xy(y(pt)) +
-    '" r="4" class="d-chart-point"/></svg></div></div>' +
-    '<div class="d-chart-labels" aria-hidden="true"><span>' +
-    c.months[0].date.slice(0, 4) +
-    '</span>' +
-    [12, 24, 36, 48, 60].map((k) => '<span>' + c.months[k - 1].date.slice(0, 4) + '</span>').join('') +
-    '</div><div class="d-chart-caption"><span>' +
-    monthName(m.date) +
-    '</span><b>' +
-    rub(pt) +
-    '</b></div></section>'
-  );
+  const amount = paid(m);
+  const selectedX = xy(x(m.m - start));
+  const svg = `<svg class="d-cash-svg" aria-hidden="true" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs><linearGradient id="dividend-wash" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--ui-accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--ui-accent)" stop-opacity=".03"/></linearGradient></defs>
+    ${grid}${depositLine}<path d="${path} V${bottom} H${left} Z" class="d-chart-area" fill="url(#dividend-wash)"/><path d="${path}" class="d-chart-series"/>
+    <line x1="${selectedX}" x2="${selectedX}" y1="${yTop}" y2="${bottom}" class="d-chart-selected"/>${returnPoint}
+    <circle cx="${selectedX}" cy="${xy(y(amount))}" r="4" class="d-chart-point"/></svg>`;
+  const axis = `<div class="d-chart-axis" aria-hidden="true"><span>${axisLabel(top)}${mobile ? ' ₽' : ''}</span><span>0 ₽</span></div>`;
+  const key = `<div class="d-chart-key"><span><i></i>Выплаты</span>${role.cash > 0 ? '<span><i class="d-dashed"></i>Денежный вклад</span>' : ''}${returnPoint ? '<span class="d-return-key"><i></i>Возврат · ' + monthName(c.months[payback - 1].date, true) + '</span>' : ''}</div>`;
+
+  if (!mobile) {
+    return `<section class="bento-card d-card d-cash-chart"><div class="d-head"><div><h2>Накопленные выплаты</h2>
+      <p class="d-note">${esc(role.full)} · после расчётного налога</p></div>${key}</div>
+      <div class="d-chart-wrap">${axis}<div class="d-chart-touch" tabindex="0" role="slider" aria-label="Месяц графика выплат" aria-valuemin="1" aria-valuemax="${end}" aria-valuenow="${m.m}" aria-valuetext="${monthName(m.date)}, ${rub(amount)}">${svg}</div></div>
+      <div class="d-chart-labels" aria-hidden="true"><span>${c.months[0].date.slice(0, 4)}</span>${[12, 24, 36, 48, 60].map((k) => '<span>' + c.months[k - 1].date.slice(0, 4) + '</span>').join('')}</div>
+      <div class="d-chart-caption"><span>${monthName(m.date)}</span><b>${rub(amount)}</b></div></section>`;
+  }
+
+  const first = points[0],
+    last = points.at(-1);
+  const periods = c.months
+    .filter((row, i) => i % 12 === 0)
+    .map((row, i) => {
+      const month = Math.min(row.m + ((m.m - 1) % 12), c.months.length);
+      const lastInYear = c.months[Math.min((i + 1) * 12, c.months.length) - 1];
+      return `<button type="button" data-chart-month="${month}" data-chart-control="year-${i}" aria-describedby="d-period-month d-period-amounts" aria-pressed="${i === yearIndex}" aria-label="Год ${i + 1}, ${monthName(row.date)} — ${monthName(lastInYear.date)}">Год ${i + 1}</button>`;
+    })
+    .join('');
+  const step = (direction) => {
+    const previous = direction < 0;
+    const target = m.m + direction;
+    const buttonId = previous ? 'prev' : 'next';
+    return `<button type="button" class="d-period-step" data-chart-month="${target}" data-chart-control="${buttonId}" aria-describedby="d-period-month d-period-amounts" aria-label="${previous ? 'Предыдущий' : 'Следующий'} месяц" ${target < 1 || target > c.months.length ? 'disabled' : ''}>${chevron}</button>`;
+  };
+  const monthAxis = [first, points[Math.floor((points.length - 1) / 2)], last]
+    .map((row) => `<span>${monthName(row.date, true)}</span>`)
+    .join('');
+  const cashReading =
+    role.cash > 0
+      ? `<div class="d-mobile-chart-reference"><span><i></i>Вклад ${rub(role.cash)}</span>${recovered ? '<span class="d-period-return"><i></i>Возврат · ' + monthName(c.months[payback - 1].date, true) + '</span>' : ''}</div>`
+      : '';
+  const firstPaid = c.months.find((row) => row.policies[policy].payouts[role.idx] * role.fraction > 0);
+  const plot =
+    values.at(-1) > 0
+      ? `<div class="d-mobile-chart-frame">${axis}<div class="d-mobile-plot" data-chart-start="${first.m}" data-chart-end="${last.m}" role="img" aria-label="Накопленные выплаты: на начало периода ${rub(opening)}, к концу ${rub(values.at(-1))}">${svg}</div></div>
+      <div class="d-mobile-chart-labels" aria-hidden="true">${monthAxis}</div>${cashReading}`
+      : `<div class="d-mobile-chart-empty"><strong>В этом году выплат нет</strong>${firstPaid ? `<button type="button" data-chart-month="${firstPaid.m}" data-chart-control="first-paid">К первой выплате · ${monthName(firstPaid.date, true)}</button>` : '<span>В выбранном сценарии за пять лет выплат не запланировано.</span>'}</div>`;
+  return `<section class="bento-card d-card d-cash-chart d-mobile-chart"><h2>Накопленные выплаты</h2>
+    <p class="d-note">${monthName(first.date, true)} — ${monthName(last.date, true)} · после расчётного налога</p>
+    <div class="d-chart-years" role="group" aria-label="Год работы фермы">${periods}</div>${plot}
+    <div class="d-mobile-chart-detail"><div class="d-period-reader">${step(-1)}<strong class="d-period-month" id="d-period-month" tabindex="-1" aria-describedby="d-period-amounts">${monthName(m.date)}</strong>${step(1)}</div>
+    <dl class="d-period-amounts" id="d-period-amounts"><div><dt>С запуска</dt><dd>${rub(amount)}</dd></div><div><dt>За месяц</dt><dd>${rub(m.policies[policy].payouts[role.idx] * role.fraction)}</dd></div></dl></div>
+  </section>`;
 }
 function payoutLedger(c, m, role, policy) {
   const chosenYear = local.year ?? Math.ceil(m.m / 12);
@@ -756,14 +743,17 @@ compact.addEventListener('change', () => {
   const disclosureId = el.closest('[data-disclosure]')?.dataset.disclosure;
   const fresh = refreshDetails(panel, ctx);
   if (hadFocus) {
-    const target = action
+    const focusWasChart = Boolean(el.closest('.d-cash-chart'));
+    const target = focusWasChart
       ? fresh.querySelector(
-          `#investor-${action}, [data-dv-select="${action}"], [data-dv-action="${action}"][data-dv-value="${CSS.escape(value)}"]`,
+          compact.matches ? '[data-chart-control][aria-pressed="true"]' : '.d-chart-touch',
         )
-      : disclosureId
-        ? fresh.querySelector(`[data-disclosure="${disclosureId}"] summary`)
-        : el.matches('.d-chart-touch')
-          ? fresh.querySelector('.d-chart-touch')
+      : action
+        ? fresh.querySelector(
+            `#investor-${action}, [data-dv-select="${action}"], [data-dv-action="${action}"][data-dv-value="${CSS.escape(value)}"]`,
+          )
+        : disclosureId
+          ? fresh.querySelector(`[data-disclosure="${disclosureId}"] summary`)
           : null;
     (target ?? fresh.querySelector('button, select, summary'))?.focus({ preventScroll: true });
   }
@@ -805,6 +795,30 @@ export function bindDetails(root, ctx) {
       ctx.update({ [action]: control.value }, { focus });
     }
   });
+  const mobileChart = panel.querySelector('.d-mobile-chart');
+  if (mobileChart) {
+    mobileChart.addEventListener('click', (event) => {
+      const control = event.target.closest('button[data-chart-month]');
+      if (control && !control.disabled) {
+        const month = Number(control.dataset.chartMonth);
+        let focus = `[data-chart-control="${control.dataset.chartControl}"]`;
+        if (control.dataset.chartControl === 'first-paid') focus = '.d-period-month';
+        if (month === 1 && control.dataset.chartControl === 'prev')
+          focus = '[data-chart-control="next"]';
+        if (month === ctx.plan.months.length && control.dataset.chartControl === 'next')
+          focus = '[data-chart-control="prev"]';
+        ctx.update({ month }, { focus });
+        return;
+      }
+      const graph = event.target.closest('.d-mobile-plot');
+      if (!graph) return;
+      const rect = graph.getBoundingClientRect();
+      const first = Number(graph.dataset.chartStart),
+        last = Number(graph.dataset.chartEnd);
+      const x = ((320 * (event.clientX - rect.left)) / rect.width - 8) / 304;
+      ctx.update({ month: first + Math.round(Math.max(0, Math.min(1, x)) * (last - first)) });
+    });
+  }
   const plot = panel.querySelector('.d-chart-touch');
   if (plot) {
     const { c, m } = select(ctx),
@@ -824,7 +838,8 @@ export function bindDetails(root, ctx) {
       );
     };
     plot.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'touch') describe(hit(e));
+      if (e.pointerType !== 'touch' && window.matchMedia('(hover: hover) and (pointer: fine)').matches)
+        describe(hit(e));
     });
     plot.addEventListener('pointerleave', () => describe(m.m));
     plot.addEventListener('click', (e) => ctx.update({ month: hit(e) }, { focus: '.d-chart-touch' }));

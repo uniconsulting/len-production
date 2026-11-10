@@ -159,7 +159,7 @@
   opacity: 0.42;
   cursor: default;
 }
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .len-picker-trigger:hover,
   .len-picker-panel button:not([aria-selected='true'], [aria-pressed='true'], :disabled):hover {
     background: var(--ui-surface-hover);
@@ -224,7 +224,7 @@
 .len-picker-field > .len-picker-trigger[aria-expanded='true'] {
   background: var(--ui-surface-hover);
 }
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .len-picker-field > .len-picker-trigger:hover {
     background: var(--ui-surface-hover);
   }

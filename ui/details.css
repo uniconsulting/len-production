@@ -399,8 +399,10 @@
 .detail-view button[aria-expanded='true'] .d-chevron {
   transform: rotate(180deg);
 }
-.d-disclosure summary:hover {
-  color: var(--ui-accent-ink);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .d-disclosure summary:hover {
+    color: var(--ui-accent-ink);
+  }
 }
 .d-breakdown {
   display: grid;
@@ -510,8 +512,10 @@
 .d-table-frame tfoot td:last-child {
   border-radius: 0 12px 12px 0;
 }
-.d-table-frame tbody tr:not(.d-fleet-detail, .d-ledger-detail):hover {
-  background: var(--ui-quiet);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .d-table-frame tbody tr:not(.d-fleet-detail, .d-ledger-detail):hover {
+    background: var(--ui-quiet);
+  }
 }
 .d-table-frame tbody tr.d-selected-row :is(td, th) {
   background: var(--detail-inset);
@@ -587,8 +591,10 @@
   height: 32px;
   border-radius: 10px;
 }
-:is(.d-icon-btn, .d-machine-button, .d-ledger-year):hover {
-  color: var(--ui-accent-ink);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  :is(.d-icon-btn, .d-machine-button, .d-ledger-year):hover {
+    color: var(--ui-accent-ink);
+  }
 }
 .detail-view .d-table-frame :is(.d-fleet-detail, .d-ledger-detail) td {
   background: var(--detail-inset);
@@ -1319,5 +1325,164 @@
 @media (pointer: coarse) {
   .d-growth-schedule .text-btn {
     min-height: 44px;
+  }
+}
+
+@media (max-width: 700px) {
+  .d-chart-years {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 2px;
+    margin-block: 18px 16px;
+    padding: 3px;
+    border-radius: 14px;
+    background: var(--ui-quiet);
+  }
+  .d-chart-years button,
+  .d-period-step,
+  .d-mobile-chart-empty button {
+    appearance: none;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    touch-action: manipulation;
+  }
+  .d-chart-years button {
+    min-width: 0;
+    min-height: 44px;
+    padding: 4px 0;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 550;
+    white-space: nowrap;
+  }
+  .d-chart-years button[aria-pressed='true'] {
+    color: var(--ui-accent-ink);
+    background: var(--ui-surface);
+  }
+  .d-mobile-chart-frame,
+  .d-mobile-chart-labels {
+    --period-gutter: 56px;
+    display: grid;
+    grid-template-columns: var(--period-gutter) minmax(0, 1fr);
+    gap: 7px;
+  }
+  .d-mobile-chart-frame .d-chart-axis {
+    width: 100%;
+    font-size: 11px;
+    padding-block: 2px;
+    align-items: start;
+    font-variant-numeric: tabular-nums;
+  }
+  .d-mobile-plot {
+    min-width: 0;
+    touch-action: pan-y pinch-zoom;
+  }
+  .d-mobile-plot .d-cash-svg {
+    height: 130px;
+    min-height: 0;
+  }
+  .d-mobile-chart-labels {
+    display: flex;
+    justify-content: space-between;
+    padding-left: calc(var(--period-gutter) + 7px);
+    color: var(--detail-quiet);
+    font-size: 11px;
+  }
+  .d-mobile-chart-reference {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-top: 10px;
+    color: var(--detail-quiet);
+    font-size: 12px;
+  }
+  .d-mobile-chart-reference span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .d-mobile-chart-reference i {
+    width: 12px;
+    border-top: 1px dashed currentColor;
+  }
+  .d-mobile-chart-reference .d-period-return i {
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--ui-accent-ink);
+    border-radius: 50%;
+  }
+  .d-mobile-chart-empty {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    min-height: 122px;
+    padding: 12px;
+    text-align: center;
+    background: var(--ui-quiet);
+    border-radius: 14px;
+  }
+  .d-mobile-chart-empty button {
+    min-height: 44px;
+    padding-inline: 4px;
+    color: var(--ui-accent-ink);
+    font-size: 13px;
+  }
+  .d-mobile-chart-empty > span {
+    margin-top: 5px;
+    color: var(--detail-quiet);
+    font-size: 13px;
+  }
+  .d-mobile-chart-detail {
+    margin-top: 18px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ui-border);
+  }
+  .d-period-reader {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    align-items: center;
+    text-align: center;
+  }
+  .d-period-month {
+    font-size: 16px;
+  }
+  .d-period-step {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ui-quiet);
+  }
+  .d-period-step[data-chart-control='prev'] svg {
+    transform: rotate(90deg);
+  }
+  .d-period-step[data-chart-control='next'] svg {
+    transform: rotate(-90deg);
+  }
+  .d-period-step[disabled] {
+    opacity: 0.38;
+  }
+  .d-period-amounts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 10px;
+    padding-top: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .d-period-amounts > div:last-child {
+    text-align: end;
+  }
+  .d-period-amounts dt {
+    color: var(--detail-quiet);
+    font-size: 13px;
+  }
+  .d-period-amounts dd {
+    margin-top: 3px;
+    font: 550 clamp(16px, 4.8vw, 22px) / 1.2 var(--ui-font);
+    letter-spacing: -0.05em;
   }
 }

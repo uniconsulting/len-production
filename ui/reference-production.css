@@ -135,7 +135,7 @@
 .production-column:focus-visible .production-column-hint {
   display: block;
 }
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .production-column:hover .production-column-hint {
     display: block;
   }
@@ -176,10 +176,12 @@
   font-size: 12px;
   line-height: 1.4;
 }
-.production-column:hover .production-column-name {
-  color: #fff;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .production-column:hover .production-column-name {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 .production-work-allocation {
   display: grid;

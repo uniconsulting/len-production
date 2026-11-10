@@ -93,9 +93,11 @@
   cursor: pointer;
 }
 
-.ref-title-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .ref-title-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
 }
 
 .ref-legend {
@@ -266,7 +268,7 @@
   outline: 2px solid #aaf3c2;
   outline-offset: 3px;
 }
-@media (hover: hover) {
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
   .ref-months:has(.ref-month:hover) .ref-month:not(:hover) > span {
     opacity: 0;
   }
@@ -304,8 +306,10 @@
   white-space: nowrap;
 }
 
-.ref-fleet-link:hover {
-  background: rgb(255 255 255 / 22%);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .ref-fleet-link:hover {
+    background: rgb(255 255 255 / 22%);
+  }
 }
 .ref-gauge {
   position: relative;
@@ -436,6 +440,25 @@
     width: 32px;
     height: 28px;
     justify-content: center;
+  }
+}
+
+@media (max-width: 700px), (pointer: coarse) {
+  /* Give these small text and pill links a full touch target without pushing the plot down. */
+  .ref-title-link,
+  .ref-fleet-link {
+    position: relative;
+  }
+
+  .ref-title-link::after,
+  .ref-fleet-link::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
   }
 }
 

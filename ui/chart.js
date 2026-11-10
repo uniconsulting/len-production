@@ -181,8 +181,12 @@ export function bindChart(root, ctx) {
     );
   };
   const tip = area.querySelector('.plot-tip');
+  const hoverPreview = matchMedia('(min-width: 701px) and (hover: hover) and (pointer: fine)');
   area.onpointermove = (e) => {
-    if (e.pointerType === 'touch') return;
+    if (e.pointerType === 'touch' || !hoverPreview.matches) {
+      tip.hidden = true;
+      return;
+    }
     const i = hit(e),
       row = points[i];
     tip.hidden = false;

@@ -17,9 +17,14 @@ select {
   font: inherit;
   color: inherit;
 }
-button,
-a {
+:where(button, a, summary, label, [role='slider']) {
   -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: 700px), (pointer: coarse) {
+  :where(button, summary, [role='slider'], label:has(input[type='radio']), nav a) {
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 button {
   cursor: pointer;
@@ -51,15 +56,16 @@ dd {
 }
 .skip-link {
   position: fixed;
-  top: -100px;
+  top: 10px;
   left: 10px;
   z-index: 60;
   background: #fff;
   padding: 10px 16px;
   border-radius: 12px;
 }
-.skip-link:focus {
-  top: 10px;
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+  pointer-events: none;
 }
 .initial {
   margin: 18vh auto;
@@ -122,10 +128,12 @@ dd {
   color: var(--ui-muted);
   font: 550 15px/1.35 var(--ui-font);
 }
-.side-nav a:hover,
-.side-bottom button:hover {
-  background: #eef0eb;
-  color: var(--ui-ink);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .side-nav a:hover,
+  .side-bottom button:hover {
+    background: #eef0eb;
+    color: var(--ui-ink);
+  }
 }
 .side-nav a[aria-current='page'] {
   background: #fff;
@@ -211,10 +219,12 @@ main {
   border-radius: 12px;
   font-weight: 600;
 }
-.share-btn:hover,
-.round-link:hover,
-.close-btn:hover {
-  background: #dae1da;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .share-btn:hover,
+  .round-link:hover,
+  .close-btn:hover {
+    background: #dae1da;
+  }
 }
 .toolbar {
   justify-content: space-between;
@@ -280,8 +290,10 @@ main {
   border-radius: 50%;
   background: #eef1eb;
 }
-.signal-open:hover {
-  background: #dde9e0;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .signal-open:hover {
+    background: #dde9e0;
+  }
 }
 .hero-card,
 .mini-card {
@@ -298,8 +310,10 @@ main {
   background: rgb(0 0 0 / 13%);
   color: #fff;
 }
-.hero-card .signal-open:hover {
-  background: rgb(0 0 0 / 24%);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .hero-card .signal-open:hover {
+    background: rgb(0 0 0 / 24%);
+  }
 }
 .depth-fill {
   position: absolute;
@@ -552,15 +566,17 @@ main {
   position: absolute;
   z-index: 2;
   top: 0;
-  display: grid;
+  display: none;
   padding: 9px 12px;
   background: #203a2b;
   color: white;
   border-radius: 12px;
   font-size: 13px;
 }
-.plot-tip[hidden] {
-  display: none;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .plot-tip:not([hidden]) {
+    display: grid;
+  }
 }
 .chart-foot {
   margin-top: 10px;
@@ -582,10 +598,12 @@ footer button {
   font-weight: 600;
   cursor: pointer;
 }
-.text-btn:hover,
-footer button:hover,
-.row-more:hover {
-  text-decoration: underline;
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .text-btn:hover,
+  footer button:hover,
+  .row-more:hover {
+    text-decoration: underline;
+  }
 }
 .round-link {
   background: #eef1eb;
@@ -785,6 +803,25 @@ footer button {
   gap: 5px;
   font-size: 13px;
 }
+/* The native modal lives outside #app. Pin the page beneath it at its
+   current offset, so touch gestures and focus changes cannot move it. */
+html.page-has-dialog {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+.page-has-dialog #app {
+  position: fixed;
+  left: 0;
+  right: var(--modal-scrollbar, 0px);
+  top: var(--modal-page-top, 0px);
+}
+dialog[open] {
+  overscroll-behavior: contain;
+}
+dialog::backdrop {
+  touch-action: none;
+}
+
 dialog {
   max-width: min(560px, calc(100% - 28px));
   max-height: 84dvh;

@@ -77,8 +77,10 @@
   border-radius: 5px;
   background: none;
 }
-.ref-mini h2 :is(button, a):hover {
-  color: var(--ui-accent-ink);
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .ref-mini h2 :is(button, a):hover {
+    color: var(--ui-accent-ink);
+  }
 }
 .ref-mini h2 .glyph {
   opacity: 0.63;
@@ -95,11 +97,11 @@
   letter-spacing: -0.035em;
 }
 .ref-board .strip-result h2,
-.ref-board .strip-result h2 button:hover {
+.ref-board .strip-result h2 button {
   color: #fff;
 }
-/* Keep this title an inline action visually, even when focus and hover coincide. */
-.ref-board .strip-result h2 button:is(:hover, :focus) {
+/* The title has its own keyboard focus indication below. */
+.ref-board .strip-result h2 button:focus {
   outline: none;
   box-shadow: none;
   border: 0;
@@ -233,7 +235,7 @@
     --ref-gap: 12px;
   }
   .ref-mini h2 :is(button, a) {
-    min-height: 42px;
+    min-height: 44px;
   }
   .ref-mini {
     padding: 12px 20px 20px;

@@ -1,14 +1,14 @@
-import { filterSummary, openFilters } from './ui/mobile-filters.js?v=13';
+import { filterSummary, openFilters } from './ui/mobile-filters.js?v=14';
 import { mobileBatchList } from './ui/mobile-overview.js?v=5';
 import { renderLead, bindLead } from './ui/reference-lead.js?v=11';
 import { renderStrip } from './ui/reference-strip.js?v=11';
 import { renderAnalytics } from './ui/reference-analytics.js?v=11';
 import { renderFAQ, bindFAQ, rememberFAQ } from './ui/investor-faq.js?v=13';
 import { icon } from './ui/icons.js';
-import { chart, bindChart } from './ui/chart.js?v=5';
+import { chart, bindChart } from './ui/chart.js?v=14';
 import { renderPickers, bindPickers } from './ui/pickers.js?v=13';
 import { bindBento } from './ui/bento.js?v=11';
-import { renderProduction, renderInvestors, bindDetails } from './ui/details.js?v=13';
+import { renderProduction, renderInvestors, bindDetails } from './ui/details.js?v=14';
 
 const app = document.querySelector('#app'),
   dialog = document.querySelector('#dialog');
@@ -363,6 +363,28 @@ function termContent() {
   );
 }
 let dialogTrigger;
+let dialogScrollPosition;
+let pressedBackdrop = false;
+
+function lockDialogPage() {
+  if (dialogScrollPosition) return;
+  const root = document.documentElement;
+  dialogScrollPosition = { left: window.scrollX, top: window.scrollY };
+  root.style.setProperty('--modal-page-top', -dialogScrollPosition.top + 'px');
+  root.style.setProperty('--modal-scrollbar', window.innerWidth - root.clientWidth + 'px');
+  root.classList.add('page-has-dialog');
+}
+
+function unlockDialogPage() {
+  if (!dialogScrollPosition) return;
+  const root = document.documentElement;
+  root.classList.remove('page-has-dialog');
+  root.style.removeProperty('--modal-page-top');
+  root.style.removeProperty('--modal-scrollbar');
+  window.scrollTo({ ...dialogScrollPosition, behavior: 'instant' });
+  dialogScrollPosition = undefined;
+}
+
 function openDialog(title, body, trigger) {
   dialogTrigger = trigger;
   dialog.innerHTML =
@@ -372,6 +394,8 @@ function openDialog(title, body, trigger) {
     icon('close') +
     '</button></div>' +
     body;
+  lockDialogPage();
+  pressedBackdrop = false;
   dialog.showModal();
   dialog.scrollTop = 0;
 }
@@ -433,15 +457,17 @@ function shareDialog(trigger) {
   );
   dialog.querySelector('#share-link').value = location.href;
 }
+function onBackdrop(event) {
+  if (event.target !== dialog) return false;
+  const { left, right, top, bottom } = dialog.getBoundingClientRect();
+  return event.clientX < left || event.clientX > right || event.clientY < top || event.clientY > bottom;
+}
+dialog.addEventListener('pointerdown', (event) => {
+  pressedBackdrop = onBackdrop(event);
+});
+dialog.addEventListener('pointercancel', () => { pressedBackdrop = false; });
 dialog.addEventListener('click', async (e) => {
-  const bounds = dialog.getBoundingClientRect();
-  const outside =
-    e.target === dialog &&
-    (e.clientX < bounds.left ||
-      e.clientX > bounds.right ||
-      e.clientY < bounds.top ||
-      e.clientY > bounds.bottom);
-  if (outside || e.target.closest('[data-close]')) {
+  if ((pressedBackdrop && onBackdrop(e)) || e.target.closest('[data-close]')) {
     dialog.close();
     return;
   }
@@ -473,9 +499,23 @@ dialog.addEventListener('click', async (e) => {
   }
 });
 dialog.addEventListener('close', () => {
+  if (dialog.open) return;
+  unlockDialogPage();
   if (dialogTrigger?.isConnected) dialogTrigger.focus({ preventScroll: true });
 });
+// Point values on the two overview charts are transient. Leave normal FAQ
+// and table disclosures open when the reader taps elsewhere.
+app.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const point = event.target.closest('details[name="ra-point"][open]');
+  if (point) {
+    point.open = false;
+    point.querySelector('summary').focus({ preventScroll: true });
+  }
+});
 app.addEventListener('click', (e) => {
+  const point = app.querySelector('details[name="ra-point"][open]');
+  if (point && !point.contains(e.target)) point.open = false;
   const b = e.target.closest('[data-view],[data-action],[data-portfolio],[data-span],[data-profile]');
   if (!b) return;
   if (b.dataset.view) {
